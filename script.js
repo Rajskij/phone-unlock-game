@@ -8,7 +8,9 @@ registrationForm.addEventListener('submit', (event) => {
     const greetingsEl = document.getElementById('player-name');
     event.preventDefault();
 
-    if (!validateUserName(nameInput.value)) return;
+    if (!validateUserName(nameInput.value)) {
+        return;
+    }
 
     greetingsEl.textContent = `Hi ${nameInput.value}`;
     gameEl.style.display = 'flex';
@@ -37,8 +39,10 @@ const passcodeEl = document.getElementById('passcode');
 const keypadEl = document.querySelector('.keypad');
 
 keypadEl.addEventListener('click', event => {
-    event.preventDefault();    
-    if (!validateKeypad(event.target)) return;
+    event.preventDefault();
+    if (!validateKeypad(event.target)) {
+        return;
+    }
 
     const num = event.target.textContent;
     if (passcodeEl.textContent.includes('*')) {
@@ -68,11 +72,11 @@ console.log('pass: ' + passcodeNum);
 
 checkBtn.addEventListener('click', () => {
     const userNum = Number(passcodeEl.textContent);
-    if (!validateNumbers(userNum)) {
+    if (!validateNumbers(passcodeEl.textContent)) {
         return;
     }
-    const hintEl = document.createElement('li');
 
+    const hintEl = document.createElement('li');
     if (userNum > passcodeNum) {
         hintEl.textContent = `>${userNum}`
         greaterTable.appendChild(hintEl);
@@ -80,23 +84,19 @@ checkBtn.addEventListener('click', () => {
         hintEl.textContent = `<${userNum}`
         lessTable.appendChild(hintEl);
     } else {
+        winGame();
         console.log('You win!');
     }
 
-    passcodeEl.textContent = '**';
+    passcodeEl.textContent = '';
     counter++;
+    if (counter >= 7) {
+        looseGame();
+    }
 })
 
 function validateNumbers(userNum) {
-    console.log(counter);
-    if (counter >= 7) {
-        console.log('You lose!');
-        return false;
-    }
     if (isNaN(userNum) || userNum.length == 0) {
-        console.log(isNaN(userNum))
-        console.log(userNum.length == 0)
-
         return false;
     }
     if (userNum > 100) {
@@ -106,3 +106,42 @@ function validateNumbers(userNum) {
 
     return true;
 }
+
+// Lose & win logic
+const phone = document.getElementById('phone');
+const rules = document.getElementById('rules');
+const phoneText = document.createElement('h1');
+const startNewGameBtn = document.createElement('button');
+const phoneBackup = phone;
+const rulesBackup = rules;
+
+// In case winning the game
+function winGame() {
+    phoneText.textContent = `You won in ${counter} tries. And unlock the phone!`
+    phone.style.textAlign = 'center';
+    phone.style.color = 'green'
+    phone.replaceChildren(phoneText);
+    clearLists();
+}
+
+// In case loosing the game
+function looseGame() {
+    phoneText.textContent = 'The phone is locked!'
+    phone.style.textAlign = 'center';
+    phone.style.color = 'red'
+    phone.replaceChildren(phoneText);
+    clearLists();
+}
+
+function clearLists() {
+    greaterTable.innerHTML = '';
+    lessTable.innerHTML = '';
+}
+
+// phoneText.innerText = `You won in ${counter} tries.\n And unlock the phone!`
+// startNewGameBtn.textContent = 'Start Game';
+// startNewGameBtn.setAttribute('id', 'btn-start');
+// rules.style.justifyContent = 'center'
+// rules.style.color = 'green'
+// rules.replaceChildren(phoneText)
+// rules.appendChild(startNewGameBtn)
