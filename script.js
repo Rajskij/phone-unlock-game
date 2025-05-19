@@ -38,12 +38,29 @@ const keypadEl = document.querySelector('.keypad');
 
 keypadEl.addEventListener('click', event => {
     event.preventDefault();
-    const num = event.target.textContent;
+    console.log(event.target.id);
+    if (event.target.id === 'remove-num') {
+        passcodeEl.textContent = passcodeEl.textContent.slice(0, -1);
+        return;
+    }
+    if (!validateNumbers(event.target)) return;
 
-    console.log(num)
-    if (passcodeEl.textContent === '****') {
+    const num = event.target.textContent;
+    if (passcodeEl.textContent.includes('*')) {
         passcodeEl.textContent = num;
     } else {
         passcodeEl.textContent += num;
     }
+    if (Number(passcodeEl.textContent) > 100) {
+        alert('number should be less then 100');
+        return false;
+    }
 });
+
+function validateNumbers(button) {
+    if (button.tagName !== 'BUTTON') return false;
+    if (passcodeEl.textContent.length > 3) return false;
+
+
+    return true;
+}
