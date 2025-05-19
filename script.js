@@ -32,18 +32,13 @@ function validateUserName(name) {
     return true;
 }
 
-// Game logic
-let passcodeEl = document.getElementById('passcode');
+// Phone logic
+const passcodeEl = document.getElementById('passcode');
 const keypadEl = document.querySelector('.keypad');
 
 keypadEl.addEventListener('click', event => {
-    event.preventDefault();
-    console.log(event.target.id);
-    if (event.target.id === 'remove-num') {
-        passcodeEl.textContent = passcodeEl.textContent.slice(0, -1);
-        return;
-    }
-    if (!validateNumbers(event.target)) return;
+    event.preventDefault();    
+    if (!validateKeypad(event.target)) return;
 
     const num = event.target.textContent;
     if (passcodeEl.textContent.includes('*')) {
@@ -51,16 +46,63 @@ keypadEl.addEventListener('click', event => {
     } else {
         passcodeEl.textContent += num;
     }
-    if (Number(passcodeEl.textContent) > 100) {
+});
+
+function validateKeypad(button) {
+    if (button.id === 'remove-num') {
+        passcodeEl.textContent = passcodeEl.textContent.slice(0, -1);
+        return false;
+    }
+
+    return button.tagName === 'BUTTON' && passcodeEl.textContent.length < 3;
+}
+
+// Check number logic
+const greaterTable = document.getElementById('greater');
+const lessTable = document.getElementById('less');
+const checkBtn = document.getElementById('btn-check');
+
+let passcodeNum = Math.floor(Math.random() * 101);
+let counter = 0;
+console.log('pass: ' + passcodeNum);
+
+checkBtn.addEventListener('click', () => {
+    const userNum = Number(passcodeEl.textContent);
+    if (!validateNumbers(userNum)) {
+        return;
+    }
+    const hintEl = document.createElement('li');
+
+    if (userNum > passcodeNum) {
+        hintEl.textContent = `>${userNum}`
+        greaterTable.appendChild(hintEl);
+    } else if (userNum < passcodeNum) {
+        hintEl.textContent = `<${userNum}`
+        lessTable.appendChild(hintEl);
+    } else {
+        console.log('You win!');
+    }
+
+    passcodeEl.textContent = '**';
+    counter++;
+})
+
+function validateNumbers(userNum) {
+    console.log(counter);
+    if (counter >= 7) {
+        console.log('You lose!');
+        return false;
+    }
+    if (isNaN(userNum) || userNum.length == 0) {
+        console.log(isNaN(userNum))
+        console.log(userNum.length == 0)
+
+        return false;
+    }
+    if (userNum > 100) {
         alert('number should be less then 100');
         return false;
     }
-});
-
-function validateNumbers(button) {
-    if (button.tagName !== 'BUTTON') return false;
-    if (passcodeEl.textContent.length > 3) return false;
-
 
     return true;
 }
