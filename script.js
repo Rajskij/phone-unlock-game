@@ -1,15 +1,16 @@
-// Player name logic
 const registrationForm = document.getElementById('registration');
 const nameForm = document.getElementById('name-form');
 const nameInput = document.querySelector('#name');
 const gameEl = document.querySelector('#main');
 const restartBtn = document.createElement('button');
+const message = document.createElement('h1');
 
 let phone = document.getElementById('phone');
 let rules = document.getElementById('rules');
 const phoneBackup = phone.innerHTML;
 const rulesBackup = rules.innerHTML;
 
+// Player name logic and setup content
 registrationForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!validateUserName(nameInput.value)) {
@@ -24,12 +25,13 @@ registrationForm.addEventListener('submit', (event) => {
     nameForm.classList.add('hidden');
 
     restartBtn.textContent = 'Start new game';
-    restartBtn.classList.add('btn-start');  
+    restartBtn.setAttribute('class', 'btn-start');
 
     setupEventListeners();
 });
 
 function validateUserName(name) {
+    console.log(window.navigator);
     name = name.trim();
     if (!name) {
         alert('Please enter your name!');
@@ -52,7 +54,8 @@ function setupEventListeners() {
     const keypadEl = document.querySelector('.keypad');
     const greaterTable = document.getElementById('greater');
     const lessTable = document.getElementById('less');
-    const checkBtn = document.getElementById('btn-check');
+    const checkBtn = phone.lastElementChild;
+
     let passcodeNum = Math.floor(Math.random() * 101);
     let counter = 0;
     greetingsEl.textContent = `Hi ${localStorage.getItem('playerName')}`;
@@ -61,7 +64,7 @@ function setupEventListeners() {
     keypadEl.addEventListener('click', event => {
         event.preventDefault();
         const button = event.target;
-        
+
         if (button.id === 'remove-num') {
             passcodeEl.textContent = passcodeEl.textContent.slice(0, -1);
             return false;
@@ -118,17 +121,14 @@ function validateNumbers(userNum) {
 // In case winning the game
 function winGame(counter) {
     const frag = document.createDocumentFragment();
-    const message = document.createElement('h1');
 
     message.innerText = `You won in ${counter} tries.\n And unlock the phone!`
     message.style.color = 'green';
     message.style.marginTop = '20vh';
 
-    // restartBtn.setAttribute('id', 'btn-restart');
-    
     frag.appendChild(message);
     frag.appendChild(restartBtn);
-    
+
     rules.replaceChildren(frag);
     phone.innerHTML = '';
     phone.style.backgroundImage = 'url(img/cool.jpg)'
@@ -136,11 +136,10 @@ function winGame(counter) {
 
 // In case loosing the game
 function looseGame() {
-    const message = document.createElement('h1');
     message.textContent = 'The phone is locked!'
+    message.style.color = 'red';
 
     phone.style.textAlign = 'center';
-    phone.style.color = 'red'
     phone.replaceChildren(message);
     phone.appendChild(restartBtn);
 }
@@ -151,9 +150,11 @@ restartBtn.addEventListener('click', () => {
     passcodeEl = document.getElementById('passcode');
     keypadEl = document.querySelector('.keypad');
 
-    rules.style.color = 'black';
-    phone.style.removeProperty('background-image');
-    phone.style.removeProperty('color');
-
+    const elementsToReset = [phone, rules];
+    elementsToReset.forEach(el => {
+        el.style.removeProperty('background-image');
+        el.style.removeProperty('color');
+    });
+    
     setupEventListeners();
 });
