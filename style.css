@@ -5,6 +5,7 @@ button {
 }
 
 body {
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,13 +56,37 @@ body {
 }
 
 /* Main game styles */
+@media (max-width: 550px) {
+    #main {
+        margin: 0;
+        padding: 0;
+        flex-flow: column-reverse;
+        align-items: center;
+        min-height: 90vh;
+    }
+
+    #rules {
+        min-width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hint-table {
+        min-width: 80px;
+        min-height: 25vh;
+    }
+}
+
 #main {
-    width: 550px;
-    height: 400px;
+    max-width: 550px;
+    max-height: 800px;
     padding: 30px;
     margin-top: 20px;
     justify-content: space-evenly;
-    display: none;
+    display: flex;
     background-color: rgb(241, 241, 241, 0.5);
     border-radius: 30px;
 }
