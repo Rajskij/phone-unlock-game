@@ -86,7 +86,7 @@ body {
     padding: 30px;
     margin-top: 20px;
     justify-content: space-evenly;
-    display: flex;
+    display: none;
     background-color: rgb(241, 241, 241, 0.5);
     border-radius: 30px;
 }
