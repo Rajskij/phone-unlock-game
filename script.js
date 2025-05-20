@@ -90,9 +90,9 @@ function setupEventListeners() {
         } else if (userNum > passcodeNum) {
             hintEl.textContent = `<${userNum}`
             lessTable.appendChild(hintEl);
-        } else {
+        } else if (userNum === passcodeNum) {
             winGame(counter);
-            console.log('You win!');
+            return;
         }
 
         passcodeEl.textContent = '';
